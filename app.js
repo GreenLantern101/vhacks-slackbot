@@ -16,6 +16,8 @@ var Primus = require('primus'),
         parser: 'JSON'
     });
 
+var Message = require('./models/message.js');
+
 
 //load config file for Slackbot
 var fs = require('fs');
@@ -99,7 +101,7 @@ bot.on('message', function(data) {
     // 1. log to console (temporary)
     console.log("In " + data.channel + ", " + data.user + " says: " + data.text);
     bot.postMessageToChannel(config.channel, 'Message received.', params);
-    // 2. log to MongoDB
+    // 2. add to MongoDB
 
 
     // 3. send via Primus to front-end json data page
