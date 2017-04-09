@@ -1,13 +1,15 @@
 # Vandyhacks Slackbot
 
-Requirements:
+### Requirements:
 config.json (contains api key, etc.)
 
-Running:
+### Running:
+```
 $ npm install
 $ npm start
+```
 
-Tech:
+### Tech:
 1. Node.js/Express.js
 2. MongoDB
 3. Primus w/ Sock.js
