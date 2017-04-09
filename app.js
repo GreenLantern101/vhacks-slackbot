@@ -20,21 +20,22 @@ var bot = new SlackBot({
         name: config.name
     });
 
-bot.on('start', function() {
     // more information about additional params https://api.slack.com/methods/chat.postMessage
     var params = {
         reply_broadcast: 'false'
     };
 
+bot.on('start', function() {
+
+/* view all channels - for debugging
     var arr = bot.getChannels();
-    for(var i in arr){
-        console.log(i);
-    }
-console.log(JSON.stringify(arr));
+    console.log(JSON.stringify(arr));
+*/
 
     // define channel, where bot exist. You can adjust it there https://my.slack.com/services
-    console.log("Channel: " + config.channel);
-    bot.postMessageToChannel(config.channel, 'Hello!*Note this is for testing.*', params);
+    console.log("Bot starting in channel: " + config.channel);
+    //greeting message
+    //bot.postMessageToChannel(config.channel, 'Welcome!', params);
 
     // define existing username instead of 'user_name'
     //bot.postMessageToUser('user_name', 'Hello!', params);
@@ -43,7 +44,10 @@ console.log(JSON.stringify(arr));
 
 bot.on('message', function(data) {
     // all ingoing events https://api.slack.com/rtm
-    console.log("In "+ data.channel+", "+data.user+" says: "+data.text);
+    if(data.user && data.text){
+      console.log("In "+ data.channel+", "+data.user+" says: "+data.text);
+      bot.postMessageToChannel(config.channel, 'Message received.', params);
+    }
 });
 
 
