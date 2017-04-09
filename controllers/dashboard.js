@@ -5,7 +5,7 @@ var express = require('express'),
 //data as JSON
 router.get('/data/messagefeed', function(req, res) {
     res.json({
-        news: app.getMessages()
+        messages: app.getMessages()
     });
 })
 

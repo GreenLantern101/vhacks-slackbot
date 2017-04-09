@@ -32,4 +32,4 @@ function refresh() {
         app.messages = res.messages;
     });
 }
-refreshnews();
+refresh();
