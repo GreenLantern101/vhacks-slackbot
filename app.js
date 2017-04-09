@@ -21,18 +21,41 @@ var Primus = require('primus'),
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync("config.json"));
 
-// make client-side primus lib, if it doesn't already exist
-fs.stat('./public/primus.js', function(err, stats) {
-    //Check if error defined and the error code is "not exists"
+fs.stat('./public/primus.min.js', function(err, stats) {
+    //if file exists
     if (err == null) {
-        console.log('***Primus.js client lib exists.');
+        console.log('***Primus.min.js client lib exists.');
     } else {
-        //Create the directory, call the callback.
-        // save client-side lib, regenerate each time recommended
-        primus.save(__dirname + '/public/primus.js');
-        console.log('***New client-side Primus lib generated.');
-
-        //TODO: UGLIFY!!!
+        // make client-side primus lib, if it doesn't already exist
+        fs.stat('./primus.js', function(err2, stats2) {
+            // file does not exist
+            if (err2 != null) {
+                //Create the directory, call the callback.
+                // save client-side lib, regenerate each time recommended
+                primus.save(__dirname + '/primus.js');
+                console.log('***New client-side Primus lib generated.');
+            }
+            //minify
+            var uglifyJS = require('uglify-js');
+            var min = uglifyJS.minify('./primus.js', {
+                mangle: true,
+                compress: {
+                    dead_code: true,
+                    unused: true,
+                    drop_console: true,
+                    join_vars: true,
+                    booleans: true,
+                    loops: true
+                }
+            });
+            fs.writeFile('./public/primus.min.js', min.code, function(err) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.log('***New client-side Primus lib minified.');
+                }
+            });
+        });
     }
 });
 
@@ -79,7 +102,7 @@ bot.on('message', function(data) {
     // 2. log to MongoDB
 
 
-    // 3. send via Primus to front-end dashboard
+    // 3. send via Primus to front-end json data page
 
 
 });
