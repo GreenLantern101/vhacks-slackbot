@@ -24,7 +24,7 @@ bot.on('start', function() {
     };
 
     // define channel, where bot exist. You can adjust it there https://my.slack.com/services
-    bot.postMessageToChannel('general', 'Hello!', params);
+    bot.postMessageToChannel('bot-testing', '<Don\'t mind me I\'m testing myself.', params);
 
     // define existing username instead of 'user_name'
     bot.postMessageToUser('user_name', 'Hello!', params);
