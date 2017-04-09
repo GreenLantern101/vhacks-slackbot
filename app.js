@@ -1,24 +1,50 @@
+'use strict';
+
 var express = require('express'),
     app = express(),
-    port = 8000;
-
-var server = require('http').Server(app);
+    port = 8000,
+    server = require('http').Server(app);
 
 //serves all static files in /public
 app.use(express.static(__dirname + '/public'));
 app.use(require('./controllers/dashboard.js'));
 
-//load config file
+// create primus for sockets
+var Primus = require('primus'),
+    primus = new Primus(server, {
+        transformer: 'sockjs',
+        parser: 'JSON'
+    });
+
+
+//load config file for Slackbot
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync("config.json"));
 
-// create a bot
+// make client-side primus lib, if it doesn't already exist
+fs.stat('./public/primus.js', function(err, stats) {
+    //Check if error defined and the error code is "not exists"
+    if (err == null) {
+        console.log('***Primus.js client lib exists.');
+    } else {
+        //Create the directory, call the callback.
+        // save client-side lib, regenerate each time recommended
+        primus.save(__dirname + '/public/primus.js');
+        console.log('***New client-side Primus lib generated.');
+
+        //TODO: UGLIFY!!!
+    }
+});
+
+// create SlackBot
 var SlackBot = require('slackbots');
 var bot = new SlackBot({
     // Add a bot https://my.slack.com/services/new/bot and put the token
     token: config.token,
     name: config.name
 });
+
+
 
 // more information about additional params https://api.slack.com/methods/chat.postMessage
 var params = {
@@ -43,19 +69,25 @@ bot.on('start', function() {
 });
 
 bot.on('message', function(data) {
-    // all ingoing events https://api.slack.com/rtm
+    // all incoming events https://api.slack.com/rtm
     if (!data.user || !data.text) {
         return;
     }
+    // 1. log to console (temporary)
     console.log("In " + data.channel + ", " + data.user + " says: " + data.text);
     bot.postMessageToChannel(config.channel, 'Message received.', params);
+    // 2. log to MongoDB
+
+
+    // 3. send via Primus to front-end dashboard
+
 
 });
 
 server.listen(port, function() {
-    console.log('Listening on port ' + port)
+    console.log('Server started on port ' + port)
 });
 
-function getMessages(){
+function getMessages() {
 
 }

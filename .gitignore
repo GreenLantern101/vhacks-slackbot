@@ -1,5 +1,6 @@
 /node_modules/*
 /config.json
+/public/primus.js
 
 # Windows image file caches
 Thumbs.db
