@@ -9,12 +9,15 @@ var server = require('http').Server(app);
 //serves all static files in /public
 app.use(express.static(__dirname + '/public'));
 
+var fs = require('fs');
+var config = JSON.parse(fs.readFileSync("config.json"));
+
 // create a bot
 
 var bot = new SlackBot({
         // Add a bot https://my.slack.com/services/new/bot and put the token
-        token: '',
-        name: 'VandyHacks Slackbot'
+        token: config.token,
+        name: config.name
     });
 
 bot.on('start', function() {
@@ -23,17 +26,24 @@ bot.on('start', function() {
         reply_broadcast: 'false'
     };
 
+    var arr = bot.getChannels();
+    for(var i in arr){
+        console.log(i);
+    }
+console.log(JSON.stringify(arr));
+
     // define channel, where bot exist. You can adjust it there https://my.slack.com/services
-    bot.postMessageToChannel('bot-testing', '<Don\'t mind me I\'m testing myself.', params);
+    console.log("Channel: " + config.channel);
+    bot.postMessageToChannel(config.channel, 'Hello!*Note this is for testing.*', params);
 
     // define existing username instead of 'user_name'
-    bot.postMessageToUser('user_name', 'Hello!', params);
+    //bot.postMessageToUser('user_name', 'Hello!', params);
 
 });
 
 bot.on('message', function(data) {
     // all ingoing events https://api.slack.com/rtm
-    console.log(data);
+    console.log("In "+ data.channel+", "+data.user+" says: "+data.text);
 });
 
 
