@@ -6,6 +6,7 @@ var server = require('http').Server(app);
 
 //serves all static files in /public
 app.use(express.static(__dirname + '/public'));
+app.use(require('./controllers/dashboard.js'));
 
 //load config file
 var fs = require('fs');
@@ -43,7 +44,7 @@ bot.on('start', function() {
 
 bot.on('message', function(data) {
     // all ingoing events https://api.slack.com/rtm
-    if (!data.user && !data.text) {
+    if (!data.user || !data.text) {
         return;
     }
     console.log("In " + data.channel + ", " + data.user + " says: " + data.text);
@@ -51,7 +52,10 @@ bot.on('message', function(data) {
 
 });
 
-
 server.listen(port, function() {
     console.log('Listening on port ' + port)
 });
+
+function getMessages(){
+
+}
