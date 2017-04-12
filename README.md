@@ -3,6 +3,8 @@
 ### Requirements:
 config.json (contains api key, etc.)
 
+Also, be sure to have MongoDB installed.
+
 ### Running:
 ```
 $ npm install

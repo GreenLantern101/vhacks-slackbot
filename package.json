@@ -12,10 +12,8 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
+    "mongodb": "^2.2.25",
     "mongoose": "^4.9.4",
-    "nodemon": "^1.11.0",
-    "primus": "^7.0.0",
-    "sockjs": "^0.3.18",
-    "uglify-js": "^2.8.22"
+    "nodemon": "^1.11.0"
   }
 }
