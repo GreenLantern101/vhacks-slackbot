@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
 
 // default connection URL -- change in production
 var url = 'mongodb://localhost:27017/vhacks-slackbot';
-
+/*
 mongoose.connect(url, function(err, db) {
     if (err) {
         console.log(err);
@@ -12,7 +12,7 @@ mongoose.connect(url, function(err, db) {
         db.close();
     }
 });
-
+*/
 exports.insert = function(db, callback) {
     db.messages.insertMany([{
         a: 1

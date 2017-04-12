@@ -4,14 +4,6 @@ var express = require('express'),
     app = express(),
     server = require('http').Server(app);
 
-
-// create primus for sockets
-var Primus = require('primus'),
-    primus = new Primus(server, {
-        transformer: 'sockjs',
-        parser: 'JSON'
-    });
-
 var Message = require('./models/message.js');
 
 
@@ -56,21 +48,30 @@ bot.on('message', function(data) {
     if (!data.user || !data.text) {
         return;
     }
+    var user = find(bot.getUsers()._value.members, 'id', data.user);
+    var channel = find(bot.getChannels()._value.channels, 'id', data.channel);
     // 1. Handle received message
-    console.log("In " + data.channel + ", " + data.user + " says: " + data.text);
-    //thank user for feedback
-    bot.postMessageToChannel(data.channel, 'Thanks for your feedback.', params);
-    //forward message to private group
-    bot.postMessageToChannel(config.channel,
-        "In " + data.channel + ", " + data.user + " says: " + data.text, params);
+    console.log("In " + channel.name + ", " + user.name + " says: " + data.text);
+    console.log(data);
+
+        //thank user for feedback
+        //bot.postMessageToChannel(data.channel, 'Thanks for your feedback.', params);
+        //forward message to private group
+        bot.postMessageToChannel(config.channel,
+            "In _" + channel.name + "_, *" + user.name + "* says: " + data.text, params);
+
     // 2. add message to MongoDB
 
 
     // 3. send via Primus to front-end json data page
-
-
 });
 
-function getMessages() {
-
+//returns 1st value that matches
+function find(arr, field, value) {
+    for(var i=0; i< arr.length; i++) {
+        if (arr[i][field] === value) {
+            return arr[i];
+        }
+    }
+    return undefined;
 }
