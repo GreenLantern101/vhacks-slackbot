@@ -13,4 +13,3 @@ $ npm start
 1. Node.js + Express.js
 2. MongoDB + Mongoose
 3. Primus w/ Sock.js
-4. Vue.js
