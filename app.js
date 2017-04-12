@@ -54,11 +54,11 @@ bot.on('message', function(data) {
     console.log("In " + channel.name + ", " + user.name + " says: " + data.text);
     console.log(data);
 
-        //thank user for feedback
-        //bot.postMessageToChannel(data.channel, 'Thanks for your feedback.', params);
-        //forward message to private group
-        bot.postMessageToChannel(config.channel,
-            "In _" + channel.name + "_, *" + user.name + "* says: " + data.text, params);
+    //thank user for feedback
+    //bot.postMessageToChannel(data.channel, 'Thanks for your feedback.', params);
+    //forward message to private group
+    bot.postMessageToChannel(config.channel,
+        "In _" + channel.name + "_, *" + user.name + "* says: " + data.text, params);
 
     // 2. add message to MongoDB
 
@@ -68,7 +68,7 @@ bot.on('message', function(data) {
 
 //returns 1st value that matches
 function find(arr, field, value) {
-    for(var i=0; i< arr.length; i++) {
+    for (var i = 0; i < arr.length; i++) {
         if (arr[i][field] === value) {
             return arr[i];
         }
