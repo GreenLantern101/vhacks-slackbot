@@ -35,7 +35,7 @@ bot.on('message', function(data) {
     }
 
     // remove mention text
-    var feedback = data.text.replace(/<@U4VTCUZ6U>/g, '');
+    var feedback = data.text.replace(/<@U4VTCUZ6U>/g, '').trim();
 
     // extract user and channel
     var user = find(bot.getUsers()._value.members, 'id', data.user);
