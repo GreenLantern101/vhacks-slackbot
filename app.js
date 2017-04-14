@@ -9,13 +9,12 @@ var Message = require('./models/message.js');
 
 // set up Slackbot
 var fs = require('fs');
-var config = JSON.parse(fs.readFileSync("config.json"));
 
 // create SlackBot
 var SlackBot = require('slackbots');
 var bot = new SlackBot({
-    token: config.token,
-    name: config.name
+    token: process.env.token,
+    name: process.env.name
 });
 
 // create params object
@@ -25,7 +24,7 @@ var params = {
 
 // on creation
 bot.on('start', function() {
-    console.log("Bot starting in channel: " + config.channel);
+    console.log("Bot starting in channel: " + process.env.channel);
 });
 
 // on posted message
@@ -46,7 +45,7 @@ bot.on('message', function(data) {
     console.log("In " + channel.name + ", " + user.name + " says: " + data.text);
 
     // thank user (both in channel and directly) for feedback
-    bot.postMessageToChannel(config.channel,
+    bot.postMessageToChannel(process.env.channel,
         "Thanks for your feedback, " + user.name + "!",
         params);
     bot.postMessageToUser(user.name, "Feedback submitted:\n" + "\"" + feedback + "\"", params);
