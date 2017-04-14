@@ -1,72 +1,62 @@
 'use strict';
 
+// declare modules to use
 var express = require('express'),
     app = express(),
     server = require('http').Server(app);
 
 var Message = require('./models/message.js');
 
-
-//load config file for Slackbot
+// set up Slackbot
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync("config.json"));
 
 // create SlackBot
 var SlackBot = require('slackbots');
 var bot = new SlackBot({
-    // Add a bot https://my.slack.com/services/new/bot and put the token
     token: config.token,
     name: config.name
 });
 
-
-
-// more information about additional params https://api.slack.com/methods/chat.postMessage
+// create params object
 var params = {
     reply_broadcast: 'false'
 };
 
+// on creation
 bot.on('start', function() {
-
-    /* view all channels - for debugging
-        var arr = bot.getChannels();
-        console.log(JSON.stringify(arr));
-    */
-
-    // define channel, where bot exist. You can adjust it there https://my.slack.com/services
     console.log("Bot starting in channel: " + config.channel);
-    //greeting message
-    //bot.postMessageToChannel(config.channel, 'Welcome!', params);
-
-    // define existing username instead of 'user_name'
-    //bot.postMessageToUser('user_name', 'Hello!', params);
-
 });
 
+// on posted message
 bot.on('message', function(data) {
-    // all incoming events https://api.slack.com/rtm
-    if (!data.user || !data.text) {
+    // only handle valid messages directed at the bot
+    if (!data.user || !data.text || !data.text.includes("<@U4VTCUZ6U>")) {
         return;
     }
+
+    // remove mention text
+    var feedback = data.text.replace(/<@U4VTCUZ6U>/g, '');
+
+    // extract user and channel
     var user = find(bot.getUsers()._value.members, 'id', data.user);
     var channel = find(bot.getChannels()._value.channels, 'id', data.channel);
-    // 1. Handle received message
+
+    // log feedback in console
     console.log("In " + channel.name + ", " + user.name + " says: " + data.text);
-    console.log(data);
 
-    //thank user for feedback
-    //bot.postMessageToChannel(data.channel, 'Thanks for your feedback.', params);
-    //forward message to private group
+    // thank user (both in channel and directly) for feedback
     bot.postMessageToChannel(config.channel,
-        "In _" + channel.name + "_, *" + user.name + "* says: " + data.text, params);
+        "Thanks for your feedback, " + user.name + "!",
+        params);
+    bot.postMessageToUser(user.name, "Feedback submitted:\n" + "\"" + feedback + "\"", params);
 
-    // 2. add message to MongoDB
-
-
-    // 3. send via Primus to front-end json data page
+    // TODO: forward feedback to private channel
+    // TODO: add message to MongoDB
+    // TODO: Integrate Primus
 });
 
-//returns 1st value that matches
+// returns 1st value that matches
 function find(arr, field, value) {
     for (var i = 0; i < arr.length; i++) {
         if (arr[i][field] === value) {
