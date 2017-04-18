@@ -44,15 +44,16 @@ bot.on('message', function(data) {
     // log feedback in console
     console.log("In " + channel.name + ", " + user.name + " says: " + data.text);
 
-    // thank user (both in channel and directly) for feedback
+    // thank user in channel for feedback
     bot.postMessageToChannel(process.env.channel,
         "Thanks for your feedback, " + user.name + "!",
         params);
-    bot.postMessageToUser(user.name, "Feedback submitted:\n" + "\"" + feedback + "\"", params);
 
-    // TODO: forward feedback to private channel
+    // forward feedback to private group
+    bot.postMessageToGroup(process.env.privatechannel, "Feedback submitted:\n" + "\"" + feedback + "\"");
+
     // TODO: add message to MongoDB
-    // TODO: Integrate Primus
+
 });
 
 // returns 1st value that matches
