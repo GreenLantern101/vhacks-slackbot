@@ -1,5 +1,6 @@
 # Todos:
 
-1. Have user search functionality/tags(from keywords), mark read/unread...
-2. Secure MongoDB instance for running in production
+1. Make bot work in all channels it has been added to.
+2. Use NLP to categorize feedback.
+3. add Postgre backend storage
 3.

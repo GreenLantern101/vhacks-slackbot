@@ -1,16 +1,15 @@
 # Vandyhacks Slackbot
 
-### Requirements:
-config.json (contains api key, etc.)
+A slackbot for getting feedback at VandyHacks.
+Express.js, PostgreSQL backend
 
-Also, be sure to have MongoDB installed.
+### Requirements:
+Heroku env. vars (private)
+
+Also, be sure to have PostgreSQL installed.
 
 ### Running:
 ```
 $ npm install
 $ npm start
 ```
-
-### Tech:
-1. Node.js + Express.js
-2. MongoDB + Mongoose

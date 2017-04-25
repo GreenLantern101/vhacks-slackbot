@@ -1,10 +1,7 @@
 # Custom
 /node_modules/*
-/config.json
-/primus.js
-/public/primus.min.js
-/data/db/*
-npm-debug.log
+postgredb_info.txt
+config.env
 
 # Windows image file caches
 Thumbs.db

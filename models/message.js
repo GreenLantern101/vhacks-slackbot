@@ -1,15 +1,18 @@
-var mongoose = require('mongoose'),
+var pg = require('pg'),
     assert = require('assert');
 
-// default connection URL -- change in production
-var url = 'mongodb://localhost:27017/vhacks-slackbot';
+// instantiate a new client
+// the client will read connection information from
+// the same environment variables used by postgres cli tools
+var client = new pg.Client();
+
+// connect to our database
 /*
-mongoose.connect(url, function(err, db) {
+client.connect(function (err) {
     if (err) {
         console.log(err);
     } else {
         console.log("Connected successfully to server.");
-        db.close();
     }
 });
 */
