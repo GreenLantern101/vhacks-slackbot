@@ -50,9 +50,9 @@ bot.on('message', function(data) {
         params);
 
     /* fast check to see if invalid input
-    * invalid if <=5 non-whitespace chars
+    * invalid if <6 non-alphabetic chars
     */
-    if(feedback.replace(/\s/g,'').length<=5){
+    if(feedback.replace(/[^A-Za-z]+/g, '').length<6){
         // if invalid, don't forward or save to db
         return;
     }
