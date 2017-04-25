@@ -42,7 +42,7 @@ bot.on('message', function(data) {
     var channel = find(bot.getChannels()._value.channels, 'id', data.channel);
 
     // log feedback in console
-    console.log("In " + channel.name + ", " + user.name + " says: " + data.text);
+    // console.log("In " + channel.name + ", " + user.name + " says: " + data.text);
 
     // thank user in channel for feedback
     bot.postMessageToChannel(process.env.channel,
@@ -50,9 +50,15 @@ bot.on('message', function(data) {
         params);
 
     // forward feedback to private group
-    bot.postMessageToGroup(process.env.privatechannel, "Feedback submitted:\n" + "\"" + feedback + "\"");
+    bot.postMessageToGroup(process.env.privatechannel, "Feedback submitted:\n" +
+        "Text: " + feedback + "\n" +
+        "TimeStamp: " + data.ts + "\n" +
+        "Channel_ID (anonymous): " + data.channel + "\n" +
+        "User_ID (anonymous): " + data.user);
 
-    // TODO: add message to MongoDB
+    // console.log(data);
+
+    // TODO: add message to PostgreSQL db
 
 });
 
