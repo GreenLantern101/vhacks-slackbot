@@ -49,6 +49,14 @@ bot.on('message', function(data) {
         "Thanks for your feedback, " + user.name + "!",
         params);
 
+    /* fast check to see if invalid input
+    * invalid if <=5 non-whitespace chars
+    */
+    if(feedback.replace(/\s/g,'').length<=5){
+        // if invalid, don't forward or save to db
+        return;
+    }
+
     // forward feedback to private group
     bot.postMessageToGroup(process.env.privatechannel, "Feedback submitted:\n" +
         "Text: " + feedback + "\n" +
