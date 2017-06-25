@@ -1,81 +1,87 @@
 'use strict';
 
 // declare modules to use
-var express = require('express'),
-    app = express(),
-    server = require('http').Server(app);
 
-var Message = require('./models/message.js');
+const Message = require('./models/message.js');
 
 // set up Slackbot
-var fs = require('fs');
-
-// create SlackBot
-var SlackBot = require('slackbots');
-var bot = new SlackBot({
-    token: process.env.token,
-    name: process.env.name
+const fs = require('fs');
+const SlackBot = require('slackbots');
+const bot = new SlackBot({
+  token: process.env.token,
+  name: process.env.name,
 });
 
 // create params object
-var params = {
-    reply_broadcast: 'false'
+const params = {
+  reply_broadcast: 'false',
 };
 
 // on creation
-bot.on('start', function() {
-    console.log("Bot starting in channel: " + process.env.channel);
+bot.on('start', () => {
+  console.log(`Bot starting in channel: ${process.env.channel}`);
 });
 
 // on posted message
-bot.on('message', function(data) {
+bot.on('message', (data) => {
     // only handle valid messages directed at the bot
-    if (!data.user || !data.text || !data.text.includes("<@U4VTCUZ6U>")) {
-        return;
-    }
+  if (!data.user || !data.text || !data.channel) {
+    return;
+  }
+
+    // require direct mention if not DMed
+  if (!data.text.includes('<@U4VTCUZ6U>')) {
+    console.log(data);
+    return;
+  }
 
     // remove mention text
-    var feedback = data.text.replace(/<@U4VTCUZ6U>/g, '').trim();
+  const feedback = data.text.replace(/<@U4VTCUZ6U>/g, '').trim();
 
     // extract user and channel
-    var user = find(bot.getUsers()._value.members, 'id', data.user);
-    var channel = find(bot.getChannels()._value.channels, 'id', data.channel);
+  const user = find(bot.getUsers()._value.members, 'id', data.user);
+  const channel = find(bot.getChannels()._value.channels, 'id', data.channel);
+
+  if (!channel) {
+    console.log("channel can't be found");
+        // console.log(bot.getChannels()._value.channels);
+        // return;
+  }
 
     // log feedback in console
     // console.log("In " + channel.name + ", " + user.name + " says: " + data.text);
 
-    // thank user in channel for feedback
-    bot.postMessageToChannel(process.env.channel,
-        "Thanks for your feedback, " + user.name + "!",
+    // thank user in channel for feedback in the same channel it was submitted in
+  bot.postMessageToChannel(data.channel,
+        `Thanks for your feedback, ${user.name}!`,
         params);
 
     /* fast check to see if invalid input
-    * invalid if <6 non-alphabetic chars
+    * invalid if <6 alphabetic chars
     */
-    if(feedback.replace(/[^A-Za-z]+/g, '').length<6){
+  if (feedback.replace(/[^A-Za-z]+/g, '').length < 6) {
         // if invalid, don't forward or save to db
-        return;
-    }
+    return;
+  }
 
     // forward feedback to private group
-    bot.postMessageToGroup(process.env.privatechannel, "Feedback submitted:\n" +
-        "Text: " + feedback + "\n" +
-        "TimeStamp: " + data.ts + "\n" +
-        "Channel_ID (anonymous): " + data.channel + "\n" +
-        "User_ID (anonymous): " + data.user);
+  bot.postMessageToGroup(process.env.privatechannel, `${'Feedback submitted:\n' +
+        'Text: '}${feedback}\n` +
+        `TimeStamp: ${data.ts}\n` +
+        `Channel_ID (anonymous): ${data.channel}\n` +
+        `User_ID (anonymous): ${data.user}`);
 
     // console.log(data);
 
     // TODO: add message to PostgreSQL db
-
 });
 
 // returns 1st value that matches
 function find(arr, field, value) {
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i][field] === value) {
-            return arr[i];
-        }
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i][field] === value) {
+      return arr[i];
     }
-    return undefined;
+  }
+  return undefined;
 }

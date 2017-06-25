@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+		"lint": "eslint --fix **/*.js",
     "start": "nodemon app.js"
   },
   "author": "",
@@ -15,5 +16,10 @@
     "nodemon": "^1.11.0",
     "pg": "^6.1.5",
     "slackbots": "^1.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.6.0"
   }
 }

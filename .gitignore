@@ -2,6 +2,7 @@
 /node_modules/*
 postgredb_info.txt
 config.env
+*.log
 
 # Windows image file caches
 Thumbs.db
