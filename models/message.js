@@ -1,11 +1,19 @@
 'use strict';
-const pg = require('pg');
+
 const assert = require('assert');
 
-// instantiate a new client
-// the client will read connection information from
-// the same environment variables used by postgres cli tools
+const pg = require('pg');
+var config = {
+  user: process.env.db_user,
+  database: process.env.db_name,
+  password: process.env.db_password,
+  host: process.env.db_host,
+  port: process.env.db_port,
+  max: 10, // max 10 clients in pool
+  idleTimeoutMillis: 10000, //10 seconds
+};
 const client = new pg.Client();
+const pool = new pg.Pool(config);
 
 // connect to our database
 /*
@@ -30,41 +38,5 @@ exports.insert = function (db, callback) {
     assert.equal(3, result.ops.length);
     console.log('Inserted 3 documents into the document collection');
     callback(result);
-  });
-};
-
-exports.update = function (db, callback) {
-  db.messages.updateOne({
-    a: 2,
-  }, {
-    $set: {
-      b: 1,
-    },
-  }, (err, result) => {
-    assert.equal(err, null);
-    assert.equal(1, result.result.n);
-    console.log('Updated the document with the field a equal to 2');
-    callback(result);
-  });
-};
-
-exports.delete = function (db, callback) {
-  db.messages.deleteOne({
-    a: 3,
-  }, (err, result) => {
-    assert.equal(err, null);
-    assert.equal(1, result.result.n);
-    console.log('Removed the document with the field a equal to 3');
-    callback(result);
-  });
-};
-
-exports.find = function (db, callback) {
-  db.messages.find({}).toArray((err, docs) => {
-    assert.equal(err, null);
-    assert.equal(2, docs.length);
-    console.log('Found the following records');
-    console.dir(docs);
-    callback(docs);
   });
 };
