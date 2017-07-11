@@ -3,7 +3,7 @@
 const assert = require('assert');
 
 const pg = require('pg');
-var config = {
+const config = {
   user: process.env.db_user,
   database: process.env.db_name,
   password: process.env.db_password,
@@ -16,27 +16,18 @@ var config = {
 const pool = new pg.Pool(config);
 
 // connect to our database
-
-pool.connect(function (err) {
+pool.connect((err) => {
     if (err) {
         console.log(err);
     } else {
-        console.log("Connected successfully to server.");
+        console.log(`Connected successfully to Postgre DB at ${config.host}.`);
+
+
+        // check if db table exists
+        // if does not exist, create a new table
     }
 });
 
-exports.insert = function (db, callback) {
-  db.messages.insertMany([{
-    a: 1,
-  }, {
-    a: 2,
-  }, {
-    a: 3,
-  }], (err, result) => {
-    assert.equal(err, null);
-    assert.equal(3, result.result.n);
-    assert.equal(3, result.ops.length);
-    console.log('Inserted 3 documents into the document collection');
-    callback(result);
-  });
+exports.insert = (obj) => {
+  // insert new obj into db table
 };
