@@ -2,7 +2,7 @@
 
 // declare modules to use
 
-const Message = require('./models/message.js');
+const dbManager = require('./dbManager.js');
 
 // set up Slackbot
 const fs = require('fs');

@@ -11,20 +11,20 @@ var config = {
   port: process.env.db_port,
   max: 10, // max 10 clients in pool
   idleTimeoutMillis: 10000, //10 seconds
+  ssl: true // prevent error when connecting to pg db
 };
-const client = new pg.Client();
 const pool = new pg.Pool(config);
 
 // connect to our database
-/*
-client.connect(function (err) {
+
+pool.connect(function (err) {
     if (err) {
         console.log(err);
     } else {
         console.log("Connected successfully to server.");
     }
 });
-*/
+
 exports.insert = function (db, callback) {
   db.messages.insertMany([{
     a: 1,
