@@ -1,6 +1,7 @@
 'use strict';
 
 const dbManager = require('./dbManager.js');
+const Promise = require('bluebird');
 
 // set up Slackbot
 const SlackBot = require('slackbots');
@@ -42,7 +43,7 @@ bot.on('message', (data) => {
 
   if (!channel) {
     console.log("channel can't be found");
-    // console.log(bot.getChannels()._value.channels);
+    console.log(bot.getChannels());
     // return;
   }
 
