@@ -1,10 +1,10 @@
 'use strict';
 
-const dbManager = require('./dbManager.js');
+// const dbManager = require('./dbManager.js');
 const Promise = require('bluebird');
 
 // set up Slackbot
-const SlackBot = require('slackbots');
+const SlackBot = require('slackbots'); //only exposes Slack RTM api
 
 const bot = new SlackBot({
   token: process.env.token,
@@ -51,7 +51,8 @@ const processMessage = (userObj, channelObj, data) => {
   //console.log("In " + channelObj.name + ", " + userObj.name + " says: " + data.text);
 
   // thank user for feedback in the same channel it was submitted in
-  bot.postMessageToUser(`Thanks for your feedback, ${userObj.name}!`, params);
+  if(userObj.name)
+    bot.postMessageToUser(userObj.name, `Thanks for your feedback, ${userObj.name}!`, params);
 
   /* fast check to see if invalid input
    * invalid if <6 alphabetic chars
@@ -90,21 +91,27 @@ const findChannel = (channelID) =>
 bot.on('message', (data) => {
   // ignore non-message events
   if (data.type !== "message") {
+    //console.log("Ignored non-message event");
     return;
   }
   // ignore it's own message responses
-  if(data.subtype && data.subtype==="bot_message"){
+  if (data.subtype && data.subtype === "bot_message") {
+    //console.log("Ignored message by bot itself");
     return;
   }
 
-  // critical message data missing
-  if (!data.user || !data.channel) {
+  if (!data.user) {
+    // should never occur if previous two checks passed
     console.log(data);
-    console.log("ERROR: part of data missing from this message. Ignoring message.");
-    
+    console.log("User info missing from this message. Ignoring message.");
     return;
   }
-
+  if(!data.channel){
+    // occurs in DM and private channels
+    console.log(data);
+    console.log("Channel info missing from this message. Ignoring message.");
+    return;
+  }
   console.log(data);
 
   // find user and channel objects & process message
