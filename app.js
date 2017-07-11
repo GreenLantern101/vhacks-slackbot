@@ -1,12 +1,10 @@
 'use strict';
 
-// declare modules to use
-
 const dbManager = require('./dbManager.js');
 
 // set up Slackbot
-const fs = require('fs');
 const SlackBot = require('slackbots');
+
 const bot = new SlackBot({
   token: process.env.token,
   name: process.env.name,
@@ -44,8 +42,8 @@ bot.on('message', (data) => {
 
   if (!channel) {
     console.log("channel can't be found");
-        // console.log(bot.getChannels()._value.channels);
-        // return;
+    // console.log(bot.getChannels()._value.channels);
+    // return;
   }
 
     // log feedback in console
@@ -53,23 +51,23 @@ bot.on('message', (data) => {
 
     // thank user in channel for feedback in the same channel it was submitted in
   bot.postMessageToChannel(data.channel,
-        `Thanks for your feedback, ${user.name}!`,
-        params);
+    `Thanks for your feedback, ${user.name}!`,
+    params);
 
     /* fast check to see if invalid input
     * invalid if <6 alphabetic chars
     */
   if (feedback.replace(/[^A-Za-z]+/g, '').length < 6) {
-        // if invalid, don't forward or save to db
+    // if invalid, don't forward or save to db
     return;
   }
 
     // forward feedback to private group
   bot.postMessageToGroup(process.env.privatechannel, `${'Feedback submitted:\n' +
-        'Text: '}${feedback}\n` +
-        `TimeStamp: ${data.ts}\n` +
-        `Channel_ID (anonymous): ${data.channel}\n` +
-        `User_ID (anonymous): ${data.user}`);
+    'Text: '}${feedback}\n` +
+    `TimeStamp: ${data.ts}\n` +
+    `Channel_ID (anonymous): ${data.channel}\n` +
+    `User_ID (anonymous): ${data.user}`);
 
     // console.log(data);
 
