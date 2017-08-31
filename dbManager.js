@@ -32,16 +32,14 @@ const dbManager = () => {
     return cursor;
   };
 
-  const insert = doc =>
+  const insert = doc => {
     // Update the document using an UPSERT operation, ensuring creation if it does not exist
     // does not change "_id" value
     collection.insert(doc)
-    .then(res =>
-      // if(res.matchedCount!==1 || res.modifiedCount!==1)
-      // return Promise.reject(`${res.matchedCount} matched, ${res.modifiedCount} modified`);
-      console.log('Inserted a doc.'),
-    );
-  // note use {$set: ...} to set just one field
+      .then(res =>
+        console.log('Inserted a doc.'),
+      );
+  }
 
 
   // be sure to close
@@ -100,4 +98,3 @@ exports.insert = (obj) => {
   // insert new obj into db table
 };
 */
-
