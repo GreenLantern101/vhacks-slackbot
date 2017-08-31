@@ -1,6 +1,6 @@
 'use strict';
 
-// const dbManager = require('./dbManager.js');
+const db = require('./dbManager.js')();
 const Promise = require('bluebird');
 
 // set up Slackbot
@@ -20,6 +20,7 @@ const params = {
 
 // on creation
 bot.on('start', () => {
+  db.connect();
   console.log(`Bot starting in channel: ${process.env.channel}`);
 });
 
@@ -81,7 +82,7 @@ const processMessage = (userObj, channelObj, data) => {
     `Channel_ID (anonymous): ${data.channel}\n` +
     `User_ID (anonymous): ${data.user}`);
 
-  // TODO: add message to PostgreSQL db
+  // TODO: add message to MongoDB
 };
 
 const findUser = userID =>
