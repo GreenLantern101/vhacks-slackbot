@@ -32,14 +32,12 @@ const dbManager = () => {
     return cursor;
   };
 
-  const insert = doc => {
+  const insert = (doc) => {
     // Update the document using an UPSERT operation, ensuring creation if it does not exist
     // does not change "_id" value
     collection.insert(doc)
-      .then(res =>
-        console.log('Inserted a doc.'),
-      );
-  }
+      .then(res => console.log('Inserted a doc.'));
+  };
 
 
   // be sure to close
