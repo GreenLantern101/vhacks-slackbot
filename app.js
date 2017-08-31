@@ -87,10 +87,10 @@ const processMessage = (userObj, channelObj, data) => {
   // store message to MongoDB
   const doc = {
     'Message Location': messageloc,
-    'Text': feedback,
-    'TimeStamp': data.ts,
+    Text: feedback,
+    TimeStamp: data.ts,
     'Channel_ID (anonymous)': data.channel,
-    'User_ID (anonymous)': data.user
+    'User_ID (anonymous)': data.user,
   };
   db.insert(doc);
 };
