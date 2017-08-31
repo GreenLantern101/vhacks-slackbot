@@ -39,8 +39,7 @@ exports.insert = (obj) => {
 
 'use strict';
 
-const dbManager = (logger) => {
-  const log = logger;
+const dbManager = () => {
 
   // Connection
   const pe = process.env;
@@ -55,7 +54,7 @@ const dbManager = (logger) => {
       poolSize: 20,
     }) // default poolsize = 5
     .then((dbInst) => {
-      log.info(`Connected to mongodb at ${url}`);
+      console.log(`Connected to mongodb at ${url}`);
       // get db, collection
       db = dbInst;
       // get existing collection, or create if doesn't exist
@@ -83,7 +82,7 @@ const dbManager = (logger) => {
     .then(res =>
       // if(res.matchedCount!==1 || res.modifiedCount!==1)
       // return Promise.reject(`${res.matchedCount} matched, ${res.modifiedCount} modified`);
-      log.debug(`Inserted ${doc.title}`),
+      console.log(`Inserted ${doc.title}`),
     );
   // note use {$set: ...} to set just one field
 
@@ -93,7 +92,7 @@ const dbManager = (logger) => {
   // can run validate() to verify correct stats
   const close = () => db.close()
     .then(() => {
-      log.info('DB closed successfully.');
+      console.log('DB closed successfully.');
     });
 
   return {
