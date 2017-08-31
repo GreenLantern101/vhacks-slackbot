@@ -63,7 +63,9 @@ const processMessage = (userObj, channelObj, data) => {
   const feedback = data.text.replace(/<@U4VTCUZ6U>/g, '').trim();
 
   // thank user for feedback in the same channel it was submitted in
-  if (userObj.name) { bot.postMessageToUser(userObj.name, `Thanks for your feedback, ${userObj.name}!`, params); }
+  if (userObj.name) {
+    bot.postMessageToUser(userObj.name, `Thanks for your feedback, ${userObj.name}!`, params);
+  }
 
   /* fast check to see if invalid input
    * invalid if <6 alphabetic chars
@@ -82,7 +84,15 @@ const processMessage = (userObj, channelObj, data) => {
     `Channel_ID (anonymous): ${data.channel}\n` +
     `User_ID (anonymous): ${data.user}`);
 
-  // TODO: add message to MongoDB
+  // store message to MongoDB
+  const doc = {
+    'Message Location': messageloc,
+    'Text': feedback,
+    'TimeStamp': data.ts,
+    'Channel_ID (anonymous)': data.channel,
+    'User_ID (anonymous)': data.user
+  };
+  db.insert(doc);
 };
 
 const findUser = userID =>
