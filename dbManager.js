@@ -70,19 +70,14 @@ const dbManager = () => {
     return cursor;
   };
 
-  const upsert = doc =>
+  const insert = doc =>
     // Update the document using an UPSERT operation, ensuring creation if it does not exist
     // does not change "_id" value
-    collection.updateOne({
-      title: doc.title,
-      youtubeid: doc.youtubeid,
-    }, doc, {
-      upsert: true,
-    })
+    collection.insert(doc)
     .then(res =>
       // if(res.matchedCount!==1 || res.modifiedCount!==1)
       // return Promise.reject(`${res.matchedCount} matched, ${res.modifiedCount} modified`);
-      console.log(`Inserted ${doc.title}`),
+      console.log(`Inserted a doc.`)
     );
   // note use {$set: ...} to set just one field
 
@@ -99,7 +94,7 @@ const dbManager = () => {
     close,
     connect,
     find,
-    upsert,
+    insert,
   };
 };
 
