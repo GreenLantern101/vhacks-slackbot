@@ -22,7 +22,7 @@ const dbManager = () => {
       // get existing collection, or create if doesn't exist
       // NOTE: Collections are not created until the first document is inserted
       collection = db.collection('slackbot');
-    }).catch(err => log.error(err));
+    }).catch(err => console.log(err));
 
   const find = (query) => {
     const cursor = collection.find(query);
