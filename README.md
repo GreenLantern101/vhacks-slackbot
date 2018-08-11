@@ -1,5 +1,7 @@
 # Vandyhacks Slackbot
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/VandyHacks/VHF2017-slackbot.svg)](https://greenkeeper.io/)
+
 A slackbot for getting feedback at VandyHacks. Built on [slackbots](https://www.npmjs.com/package/slackbots).
 
 ### Dev:
